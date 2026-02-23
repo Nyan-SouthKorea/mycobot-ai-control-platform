@@ -10,7 +10,9 @@
 
 ## 1) 프로젝트 구성(파일/코드 블록 설명)
 
-본 대화에 포함된 코드는 크게 3가지 성격으로 나뉩니다.
+본 대화에 포함된 코드는 크게 3가지 성격으로 나뉩니다.  
+아래 코드 base를 기반으로 2D Object Detection 기반의 물체 Pick and Place Demo.도 함께 구현됩니다.
+![alt text](README_img/image2.png)
 
 1. **연결 확인 및 API 메서드 목록 출력 예제**
    - `is_controller_connected()`, `get_angles()` 등을 호출하여 통신 상태를 검증
@@ -354,11 +356,11 @@ mc.send_coords(p4, speed=15, mode=1)
 ## Appendix A) 권장 실행 순서(운영 플로우)
 
 1) 로봇 전원 ON → 부팅 완료  
-2) 로봇이 회사 Wi‑Fi 자동 연결  
+2) 로봇이 Wi‑Fi 자동 연결  
 3) 로봇에서 `Server_280.py` 자동 실행(이미 설정 완료)  
 4) PC에서 `ifconfig` 로 로봇 IP 확인  
 5) GUI 실행 → IP/Port 입력 → Connect  
-6) Power ON / Torque ON  
+6) Power ON / Torque ON  s
 7) Step으로 위치 맞춘 뒤 Pose 저장  
 8) 필요 시 `teach_poses.jsonl`을 기반으로 동작 스크립트 작성
 
