@@ -1,0 +1,64 @@
+{
+  "description": "pixel(u,v) -> world(mm) via H, then world -> robot(mm) via offset",
+  "image_points_uv": [
+    [
+      429.0,
+      342.0
+    ],
+    [
+      39.0,
+      353.0
+    ],
+    [
+      36.0,
+      81.0
+    ],
+    [
+      422.0,
+      73.0
+    ]
+  ],
+  "world_points_mm": [
+    [
+      120.75,
+      170.0
+    ],
+    [
+      120.75,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      170.0
+    ]
+  ],
+  "H_pixel_to_world": [
+    [
+      0.009316297487735804,
+      0.4495113537832515,
+      -36.745806366001844
+    ],
+    [
+      0.4366054979504566,
+      -0.004815501815629852,
+      -15.327742279150396
+    ],
+    [
+      -2.6738852002619074e-05,
+      3.920156857931131e-05,
+      0.9999999999999999
+    ]
+  ],
+  "robot_offset_mm": {
+    "x": 125,
+    "y": -86.25
+  },
+  "notes": {
+    "pixel_points_are_on_undistorted_image": true,
+    "click_order": "P0,P1,P2,P3 must match between image_points and world_points"
+  }
+}

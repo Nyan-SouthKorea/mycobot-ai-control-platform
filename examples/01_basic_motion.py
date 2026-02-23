@@ -1,9 +1,16 @@
 from pymycobot import MyCobotSocket
 import time
 
-mc = MyCobotSocket("192.168.20.140", 9000)
+# ip 정보 읽어오기
+with open('IP_info.txt', 'r', encoding='utf-8') as f:
+    f = f.read()
+    ip, port = f.split(', ')
+    port = int(port)
+    print(f'IP주소: {ip}, 포트: {port}')
+mc = MyCobotSocket(ip, port)
 mc.power_on()
 time.sleep(1)
+
 
 
 # -----------------------
@@ -39,3 +46,8 @@ p4[2] -= 40
 
 mc.send_coords(p4, speed=15, mode=1)
 
+
+# -----------------------
+# Joint 이동
+# -----------------------
+mc.send_angles([0.42, -14.06, -85.78, 100.81, -0.35, 43.41], speed=100)

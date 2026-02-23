@@ -1,3 +1,20 @@
 # AI 모델 파일 유출 방지(용량 초과 함께 방지)
 *.pt
 *.onnx
+
+# 용량 큰 Tool들 업로드 방지
+*.exe
+
+# 데이터셋 업로드 방지
+*.jpg
+*.txt
+*.json
+
+# 예외
+!IP_info.txt
+!homography_robot_map.json
+!labels.jpg
+!train_batch0.jpg
+!train_batch1.jpg
+!train_batch2.jpg
+!checkerboard_imgs/

@@ -11,7 +11,7 @@ Features:
 - Servo Torque ON/OFF (focus/release)
 - Live Angles + Coords display
 - Mode toggle: WORLD / JOINT
-- 6-axis +/- step buttons
+- 6-axis +/- step buttonsF
   - JOINT: step in degrees per click
   - WORLD: XYZ step in mm per click; RXRYRZ step in degrees per click
 - Speed slider
@@ -27,9 +27,16 @@ from tkinter import ttk, messagebox
 
 from pymycobot import MyCobotSocket
 
+# ip 정보 읽어오기
+with open('IP_info.txt', 'r', encoding='utf-8') as f:
+    f = f.read()
+    ip, port = f.split(', ')
+    port = int(port)
+    print(f'IP주소: {ip}, 포트: {port}')
+
 
 class PendantApp(tk.Tk):
-    def __init__(self):
+    def __init__(self, ip, port):
         super().__init__()
         self.title("myCobot Teaching Pendant (STEP mode)")
         self.geometry("1050x700")
@@ -40,8 +47,12 @@ class PendantApp(tk.Tk):
 
         # UI state
         self.mode = tk.StringVar(value="WORLD")  # WORLD or JOINT
-        self.ip_var = tk.StringVar(value="192.168.20.140")
-        self.port_var = tk.IntVar(value=9000)
+        # self.ip_var = tk.StringVar(value="192.168.31.239")
+        # self.port_var = tk.IntVar(value=9000)
+
+        self.ip_var = tk.StringVar(value=ip)
+        self.port_var = tk.IntVar(value=port)
+
 
         self.speed_var = tk.IntVar(value=40)
         self.joint_step_deg_var = tk.DoubleVar(value=2.0)   # per click
@@ -430,5 +441,5 @@ class PendantApp(tk.Tk):
 
 
 if __name__ == "__main__":
-    app = PendantApp()
+    app = PendantApp(ip, port)
     app.mainloop()
