@@ -61,7 +61,31 @@ def apply_offset(pos, offset):
     new_pos = deepcopy(pos)
     new_pos[0] += offset['x']
     new_pos[1] += offset['y']
+    new_pos[2] += offset['z']
     return new_pos
+
+def z_offset_with_x(offset):
+    '''
+    이 로봇은 X가 + 되면 백래시로 인해 Z가 쳐지는 현상이 심함.
+    따라서 단순하게 X를 기반으로 Z를 보정하는 로직을 추가함
+
+    최소 x일 때: [180, 0, 100, 180, 5, -132]
+    최대 x일 때: [280, 0, 115, 180, 5, -132]
+
+    => x가 100mm 더해지면 z도 15mm 더해야 함.
+    => 즉 x가 1mm 더해질 때 z를 0.15mm 더해야 함
+    '''
+    offset_z = 0.15
+    
+    # 보정할 z 계산하기
+    z_change = offset['x'] * offset_z
+
+    # 오프셋값 반영
+    offset['z'] = z_change
+
+    print(f'z오프셋: {z_change}')
+
+    return offset
 
 # ===== 하드코딩 설정 =====
 CAM_ID = 0
@@ -72,7 +96,7 @@ ROBOT_IP_PATH = './IP_info.txt'
 
 # 로봇 이동 속도 (%)
 ROBOT_SPEED = 50
-MOVE_DELAY = 0.3
+MOVE_DELAY = 2
 
 yolo_thread = YOLO_thread(YOLO_WEIGHT_PATH, CALIB_NPZ_PATH, HOMO_JSON_PATH, CAM_ID)
 robot = MyCobotController(ROBOT_IP_PATH, default_speed=ROBOT_SPEED)
@@ -91,13 +115,14 @@ OBJECT_ORIGIN_MM = {'x':254.7, 'y':3.8}
 
 # ===== 로봇 포지션 설정(상수) =====
 # Pick Approach (Z값)
-PICK_APPROACH = 120
+PICK_APPROACH = 100
+THROW_APPROACH = 50
 
 # 카메라 대기 위치
 LOC_ORIGIN_mm = [170, 0, 290, -92, 44, -90]
 
 # Pick
-LOC_pick_mm = [240, 0, 124, 180, 5, -132]
+LOC_pick_mm = [240, 0, 126, 180, 5, -132]
 
 # Pick Approach
 LOC_pick_appro_mm = deepcopy(LOC_pick_mm)
@@ -105,8 +130,12 @@ LOC_pick_appro_mm[2] += PICK_APPROACH
 
 # 물체 버리는 위치
 LOC_THROW_mm = deepcopy(LOC_pick_mm)
-LOC_THROW_mm[0] -= 0
-LOC_THROW_mm[2] += 20
+LOC_THROW_mm[0] -= 10
+LOC_THROW_mm[2] += 15
+
+# Throw Approach
+LOC_throw_appro_mm = deepcopy(LOC_THROW_mm)
+LOC_throw_appro_mm[2] += THROW_APPROACH
 
 
 
@@ -130,6 +159,9 @@ while True:
         'x': obj_loc['x'] - OBJECT_ORIGIN_MM['x'],
         'y': obj_loc['y'] - OBJECT_ORIGIN_MM['y']
     }
+
+    # 백래시로 인한 Z 쳐짐 offset 반영
+    offset = z_offset_with_x(offset)
     
     # Pick approach
     robot.move_world(apply_offset(LOC_pick_appro_mm, offset), 1)
@@ -147,11 +179,17 @@ while True:
     time.sleep(MOVE_DELAY)
 
     # 버리는 곳으로 이동
+    robot.move_world(LOC_throw_appro_mm, 1)
+    time.sleep(MOVE_DELAY)
+
     robot.move_world(LOC_THROW_mm, 1)
     time.sleep(MOVE_DELAY)
 
     # 그리퍼 놓기
     robot.gripper_open_retry()
+
+    robot.move_world(LOC_throw_appro_mm, 1)
+    time.sleep(MOVE_DELAY)
 
 
 
