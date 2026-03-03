@@ -1,10 +1,13 @@
 import cv2
 import numpy as np
 
+import sys, os; sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from mirae_tof.etf_wrapper import FolderCapture
+
 # ----------------------------
 # 1) 캘리브레이션 로드 (undistort용)
 # ----------------------------
-data = np.load("camera_calibration/camera_calib.npz")
+data = np.load("camera_calibration/camera_calib_ir.npz")
 K = data["cameraMatrix"]
 dist = data["distCoeffs"]
 
@@ -14,10 +17,10 @@ dist = data["distCoeffs"]
 #    - world_points: 로봇 world(mm) 좌표 (체커보드 기준)
 # ----------------------------
 image_points = np.array([
-    [463, 439],  # P0
-    [54, 450],  # P1
-    [56, 169],  # P2
-    [449, 156],  # P3
+    [123, 35],  # P0
+    [500, 26],  # P1
+    [517, 290],  # P2
+    [103, 288],  # P3
 ], dtype=np.float32)
 
 world_points = np.array([
@@ -28,8 +31,8 @@ world_points = np.array([
 ], dtype=np.float32)
 
 # 로봇 base 기준 오프셋 반영
-ROBOT_OFFSET_X = 150
-ROBOT_OFFSET_Y = -86.25
+ROBOT_OFFSET_X = 161.5
+ROBOT_OFFSET_Y = 28.5
 
 # ----------------------------
 # 3) Homography 계산 (pixel -> world(mm))
@@ -69,14 +72,14 @@ def mouse_callback(event, x, y, flags, param):
 # ----------------------------
 # 4) 카메라 + UI
 # ----------------------------
-cap = cv2.VideoCapture(0)
+cap = FolderCapture()
 cv2.namedWindow("undistorted")
 cv2.setMouseCallback("undistorted", mouse_callback)
 
 while True:
     ret, frame = cap.read()
     if not ret:
-        break
+        continue
 
     und = cv2.undistort(frame, K, dist)
 

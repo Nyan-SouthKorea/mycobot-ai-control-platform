@@ -7,10 +7,10 @@ import cv2
 # ----------------------------
 
 image_points = np.array([
-    [463, 439],  # P0
-    [54, 450],  # P1
-    [56, 169],  # P2
-    [449, 156],  # P3
+    [123, 35],  # P0
+    [500, 26],  # P1
+    [517, 290],  # P2
+    [103, 288],  # P3
 ], dtype=np.float32)
 
 world_points = np.array([
@@ -21,8 +21,9 @@ world_points = np.array([
 ], dtype=np.float32)
 
 # 로봇 base 기준 오프셋 반영
-ROBOT_OFFSET_X = 125
-ROBOT_OFFSET_Y = -86.25
+ROBOT_OFFSET_X = 161.5
+ROBOT_OFFSET_Y = 28.5
+
 
 
 OUT_JSON = "homography_robot_map.json"

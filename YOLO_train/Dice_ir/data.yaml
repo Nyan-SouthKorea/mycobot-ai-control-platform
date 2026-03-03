@@ -1,0 +1,5 @@
+train: D:/260127_MyCobot/YOLO_train/Dice_ir/dataset/train
+val: D:/260127_MyCobot/YOLO_train/Dice_ir/dataset/val
+
+names:
+  0: dice

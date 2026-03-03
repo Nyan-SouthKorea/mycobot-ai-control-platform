@@ -11,10 +11,6 @@
 *.json
 
 # 예외
-!IP_info.txt
-!homography_robot_map.json
-!labels.jpg
-!train_batch0.jpg
-!train_batch1.jpg
-!train_batch2.jpg
-!checkerboard_imgs/
+!img-ir_detecting.jpg
+!img-rbg_detecting.jpg
+!img-robot_working.jpg

@@ -18,7 +18,7 @@ objp *= SQUARE_SIZE
 objpoints = []  # 3D (world)
 imgpoints = []  # 2D (image)
 
-images = glob.glob("camera_calibration/checkerboard_imgs/*.jpg")
+images = glob.glob("camera_calibration/checkerboard_imgs_ir/*.jpg")
 
 # ----------------------------
 # 코너 검출

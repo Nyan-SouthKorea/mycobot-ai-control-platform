@@ -134,8 +134,6 @@ class MyCobotController:
         if speed is None:
             speed = self.default_speed
 
-        if (not isinstance(angles_deg, list)) or (len(angles_deg) != 6):
-            raise ValueError("angles_deg must be a list of 6 numbers")
 
         self.mc.send_angles(angles_deg, int(speed))
         time.sleep(self.cmd_sleep)

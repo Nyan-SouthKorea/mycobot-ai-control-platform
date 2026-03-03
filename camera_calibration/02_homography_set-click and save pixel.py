@@ -1,10 +1,13 @@
 import cv2
 import numpy as np
 
+import sys, os; sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from mirae_tof.etf_wrapper import FolderCapture
+
 # ----------------------------
 # 캘리브레이션 로드
 # ----------------------------
-data = np.load("camera_calibration/camera_calib.npz")
+data = np.load("camera_calibration/camera_calib_ir.npz")
 cameraMatrix = data["cameraMatrix"]
 distCoeffs = data["distCoeffs"]
 
@@ -24,14 +27,14 @@ def mouse_callback(event, x, y, flags, param):
 # ----------------------------
 # 카메라
 # ----------------------------
-cap = cv2.VideoCapture(0)
+cap = FolderCapture()
 cv2.namedWindow("undistorted")
 cv2.setMouseCallback("undistorted", mouse_callback)
 
 while True:
     ret, frame = cap.read()
     if not ret:
-        break
+        continue
 
     # 왜곡 보정
     undistorted = cv2.undistort(frame, cameraMatrix, distCoeffs)
@@ -49,12 +52,21 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-cap.release()
 cv2.destroyAllWindows()
 
 print("\nFinal pixel points:")
 for i, p in enumerate(clicked_points):
     print(f"P{i}: {p}")
+
+'''
+로봇 베이스: 143mm
+베이스로부터 체커보드 거리
+  - x: 100mm
+  - y: 100mm
+
+아래 계산에 적용하여 오프셋값은 (143/2) + 100 이 x가 되는거고, y는 100 - (143/2) 하면 됨  
+'''
+
 
 '''
 <체커보드 사이즈>
@@ -70,13 +82,13 @@ P3: 좌하 (0, 170)
 
 <내가 기록한 픽셀값> - 260128
 (로봇 시점으로 좌상, 우상, .. 방향 설정함)
-P0: [429, 342]
-P1: [39, 353]
-P2: [36, 81]
-P3: [422, 73]
+P0: [142, 169]
+P1: [414, 156]
+P2: [448, 346]
+P3: [79, 352]
 
 <체커보드 base 오프셋값>
 로봇의 x, y 0 포인트는 실제로 로봇 base에서 
-x 125mm
-y -86.25mm (체커보드를 가운데 두었기 때문에 계산 상 17.25x5)
+x 171.5
+y 28.5
 '''
